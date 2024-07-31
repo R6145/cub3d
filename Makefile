@@ -6,7 +6,7 @@
 #    By: fmaqdasi <fmaqdasi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/03 18:19:18 by fmaqdasi          #+#    #+#              #
-#    Updated: 2024/07/22 14:10:08 by fmaqdasi         ###   ########.fr        #
+#    Updated: 2024/07/31 16:05:50 by fmaqdasi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ MINILIBX_DIR = minilibx/
 MINILIBX = minilibx/libmlx.a
 LIBFT = libft/libft.a
 
-# SRCS        := 				
+SRCS        := 				get_next_line.c \
 
 
 SRCSM1       :=            fractol.c \

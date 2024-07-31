@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmaqdasi <fmaqdasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/10 14:47:26 by fmaqdasi          #+#    #+#             */
-/*   Updated: 2024/07/22 14:07:15 by fmaqdasi         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:05:14 by fmaqdasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # define WIDTH 800
 # define HEIGHT 800
+# define TILE_SIZE 20
+# define BUFFER_SIZE 0
 
 // typedef struct s_movement
 // {
@@ -38,14 +40,16 @@
 
 typedef struct s_mlx
 {
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-	int			*data;
-	int			size_l;
-	int			bpp;
-	int			endian;
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+	int		*data;
+	int		size_l;
+	int		bpp;
+	int		endian;
 	// t_movemet	move;
-}				t_mlx;
+}			t_mlx;
+
+char		*get_next_line(int fd);
 
 #endif
