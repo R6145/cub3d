@@ -6,24 +6,26 @@
 #    By: fmaqdasi <fmaqdasi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/03 18:19:18 by fmaqdasi          #+#    #+#              #
-#    Updated: 2024/07/31 16:05:50 by fmaqdasi         ###   ########.fr        #
+#    Updated: 2024/08/04 01:01:43 by fmaqdasi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# -framework OpenGL -framework AppKit
+# sudo apt install libc++-15-dev libc++abi-15-dev
 NAME        := fractol
 CC          := cc
-CFLAGS       := -Wall -Wextra -Werror
+CFLAGS       := -g3 -fsanitize=address #-Wall -Wextra -Werror -g3 -fsanitize=address
 RM		    := rm -f
 # INCLUDE =  -Ilibft/ -Iminilibx/
 LIBFT_DIR = libft/
-MINILIBX_DIR = minilibx/
-MINILIBX = minilibx/libmlx.a
+MINILIBX_DIR = minilibx-linux/
+MINILIBX = minilibx-linux/libmlx.a
 LIBFT = libft/libft.a
 
 SRCS        := 				get_next_line.c \
 
 
-SRCSM1       :=            fractol.c \
+SRCSM1       :=            cub.c \
 
 
                           
@@ -36,9 +38,8 @@ MINI = -L$(MINILIBX_DIR) $(MINILIBX)
 .c.o:
 	@${CC} ${CFLAGS} $(INCLUDE) -c $< -o $@
 	
-    
 ${NAME}:	${OBJS} ${OBJSNAME} $(LIBFT) $(MINILIBX)
-			@${CC} ${CFLAGS} ${OBJS} ${OBJSNAME} $(LIBS) $(MINI) -framework OpenGL -framework AppKit -lm -o ${NAME} 
+			@${CC} ${CFLAGS} ${OBJS} ${OBJSNAME} $(LIBS) $(MINI) -lXext -lX11 -lm -o ${NAME} 
 			@echo "\033[0;32mFractol compiled successfully"
 $(LIBFT):
 	        @make -C $(LIBFT_DIR) -s

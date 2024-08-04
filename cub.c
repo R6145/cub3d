@@ -6,7 +6,7 @@
 /*   By: fmaqdasi <fmaqdasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/10 13:39:21 by fmaqdasi          #+#    #+#             */
-/*   Updated: 2024/07/31 16:08:04 by fmaqdasi         ###   ########.fr       */
+/*   Updated: 2024/08/04 17:44:40 by fmaqdasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,59 +81,140 @@ void	draw_tile(void *mlx, void *win, int x, int y, int color)
 	}
 }
 
-void	map_save(char **map, char *path)
+char	**map_save(char **map, char *path)
 {
 	int		i;
 	char	temp;
 	int		fd;
 
-	i = 0;
+	i = 1;
 	map = malloc(10000);
-	fd = open(path);
+	fd = open(path, O_RDONLY);
 	map[0] = get_next_line(fd);
 	while (map[i] != NULL)
 		map[i++] = get_next_line(fd);
+	map[i] = NULL;
+	i = 0;
+	printf("%s\n", map[0]);
+	while (map[i] != NULL)
+		printf("%s\n", map[i++]);
+	close(fd);
+	return (map);
+}
+
+void	draw_player(void *mlx, void *win, int x, int y, int color)
+{
+	int	i;
+
+	for (i = 0; i < TILE_SIZE; i++)
+	{
+		mlx_pixel_put(mlx, win, x * TILE_SIZE + i, y * TILE_SIZE, color);
+		mlx_pixel_put(mlx, win, x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE
+			- i, color);
+		mlx_pixel_put(mlx, win, x * TILE_SIZE + TILE_SIZE - i, y * TILE_SIZE,
+			color);
+	}
+}
+
+int	key_press(int keycode, t_mlx *mlx)
+{
+	if (keycode == 65307) // Escape key
+		exit(0);
+	if (keycode == 65361) // Left arrow key
+		mlx->player_x--;
+	if (keycode == 65362) // Up arrow key
+		mlx->player_y--;
+	if (keycode == 65363) // Right arrow key
+		mlx->player_x++;
+	if (keycode == 65364) // Down arrow key
+		mlx->player_y++;
+	render_next_frame(&mlx);
+	return (0);
+}
+
+// int	main(void)
+// {
+// 	t_mlx	mlx;
+// 	char	**map;
+// 	int		rows;
+// 	int		cols;
+
+// 	map = map_save(map, "map.txt");
+// 	rows = 33;
+// 	cols = 14;
+// 	int i, j;
+// 	mlx.mlx_ptr = mlx_init();
+// 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIDTH, HEIGHT, "Map Display");
+// 	i = 0;
+// 	while (map[i] != NULL)
+// 	{
+// 		j = 0;
+// 		while (map[i][j] != '\0')
+// 		{
+// 			if (map[i][j] == '1')
+// 				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0xFFFFFF);
+// 			// White color for walls
+// 			else if (map[i][j] == '0')
+// 				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0x000000);
+// 			// Black color for empty space
+// 			else if (map[i][j] == 'N')
+// 				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0xFF0000);
+// 			// Red color for a special item
+// 			else if (map[i][j] == ' ')
+// 				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0x0000FF);
+// 			// Blue color for open space
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	mlx_loop(mlx.mlx_ptr);
+// 	return (0);
+// }
+
+int	render_next_frame(t_mlx *mlx)
+{
+	char	**map;
+	int i, j;
+	// Clear the window
+	mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
+	// Redraw the map
+	map = map_save(map, "map.txt");
+	i = 0;
+	while (map[i] != NULL)
+	{
+		j = 0;
+		while (map[i][j] != '\0')
+		{
+			if (map[i][j] == '1')
+				draw_tile(mlx->mlx_ptr, mlx->win_ptr, j, i, 0xFFFFFF);
+			else if (map[i][j] == '0')
+				draw_tile(mlx->mlx_ptr, mlx->win_ptr, j, i, 0x000000);
+			else if (map[i][j] == 'N')
+				draw_tile(mlx->mlx_ptr, mlx->win_ptr, j, i, 0xFF0000);
+			else if (map[i][j] == ' ')
+				draw_tile(mlx->mlx_ptr, mlx->win_ptr, j, i, 0x0000FF);
+			j++;
+		}
+		i++;
+	}
+	draw_player(mlx->mlx_ptr, mlx->win_ptr, mlx->player_x, mlx->player_y,
+		0x00FF00);
+	return (0);
 }
 
 int	main(void)
 {
-	t_mlx	mlx;
-	char	**map;
-	int		rows;
-	int		cols;
+	t_mlx mlx;
 
-	// map[] = {"1111111111111111111111111", "1000000000110000000000001",
-	// 	"1011000001110000000000001", "1001000000000000000000001",
-	// 	"111111111011000001110000000000001",
-	// 	"100000000011000001110111111111111", "11110111111111011100000010001",
-	// 	"11110111111111011101010010001", "11000000110101011100000010001",
-	// 	"10000000000000001100000010001", "10000000000000001101010010001",
-	// 	"11000001110101011111011110N0111", "11110111 1110101 101111010001",
-	// 	"11111111 1111111 111111111111"};
-	map_save(map, map.txt);
-	rows = sizeof(map) / sizeof(map[0]);
-	cols = ft_strlen(map[0]);
-	int i, j;
+	mlx.player_x = 1;
+	mlx.player_y = 1;
 	mlx.mlx_ptr = mlx_init();
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIDTH, HEIGHT, "Map Display");
-	for (i = 0; i < rows; i++)
-	{
-		for (j = 0; j < cols; j++)
-		{
-			if (map[i][j] == '1')
-				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0xFFFFFF);
-			// White color for walls
-			else if (map[i][j] == '0')
-				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0x000000);
-			// Black color for empty space
-			else if (map[i][j] == 'N')
-				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0xFF0000);
-			// Red color for a special item
-			else if (map[i][j] == ' ')
-				draw_tile(mlx.mlx_ptr, mlx.win_ptr, j, i, 0x0000FF);
-			// Blue color for open space
-		}
-	}
+	render_next_frame(&mlx);
+
+	mlx_key_hook(mlx.win_ptr, key_press, &mlx);
+	// mlx_loop_hook(mlx.mlx_ptr, render_next_frame, &mlx);
 	mlx_loop(mlx.mlx_ptr);
+
 	return (0);
 }
