@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "mlx.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "stdio.h": "c",
+        "cub.h": "c",
+        "libft.h": "c"
     }
 }

@@ -6,7 +6,7 @@
 #    By: fmaqdasi <fmaqdasi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/03 18:19:18 by fmaqdasi          #+#    #+#              #
-#    Updated: 2024/08/04 01:01:43 by fmaqdasi         ###   ########.fr        #
+#    Updated: 2024/08/13 19:02:26 by fmaqdasi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,18 +14,31 @@
 # sudo apt install libc++-15-dev libc++abi-15-dev
 NAME        := fractol
 CC          := cc
-CFLAGS       := -g3 -fsanitize=address #-Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS       := -Wall -Wextra -Werror -g3 -fsanitize=address
 RM		    := rm -f
 # INCLUDE =  -Ilibft/ -Iminilibx/
-LIBFT_DIR = libft/
+# LIBFT_DIR = libft/
 MINILIBX_DIR = minilibx-linux/
 MINILIBX = minilibx-linux/libmlx.a
-LIBFT = libft/libft.a
+# LIBFT = libft/libft.a
 
-SRCS        := 				get_next_line.c \
+SRCS        := 				src/parsing_color_resolution_texture.c \
+							src/parsing_map.c \
+							src/parsing_utils.c \
+							src/keys_draw.c \
+							src/raycasting_init.c \
+							src/raycasting_utils.c \
+							src/raycasting_move.c \
+							src/raycasting.c \
+							src/sprites.c \
+							src/errors.c \
+							src/save.c \
+							src/get_next_line.c \
+							src/get_next_line_utils.c \
+							src/init.c
 
 
-SRCSM1       :=            cub.c \
+SRCSM1       :=           src/parsing.c \
 
 
                           
@@ -39,11 +52,11 @@ MINI = -L$(MINILIBX_DIR) $(MINILIBX)
 	@${CC} ${CFLAGS} $(INCLUDE) -c $< -o $@
 	
 ${NAME}:	${OBJS} ${OBJSNAME} $(LIBFT) $(MINILIBX)
-			@${CC} ${CFLAGS} ${OBJS} ${OBJSNAME} $(LIBS) $(MINI) -lXext -lX11 -lm -o ${NAME} 
+			@${CC} ${CFLAGS} ${OBJS} ${OBJSNAME} $(LIBS) $(MINI) -lm -lX11 -lXext -o ${NAME} 
 			@echo "\033[0;32mFractol compiled successfully"
-$(LIBFT):
-	        @make -C $(LIBFT_DIR) -s
-			@echo "\033[0;32mLibft compiled successfully"
+# $(LIBFT):
+# 	        @make -C $(LIBFT_DIR) -s
+# 			@echo "\033[0;32mLibft compiled successfully"
 			
 $(MINILIBX):
 	        @make -C $(MINILIBX_DIR) -s
@@ -53,14 +66,14 @@ all:		${NAME}
 
 clean:
 			@${RM} *.o
-			@make -C $(LIBFT_DIR) clean -s
+			# @make -C $(LIBFT_DIR) clean -s
 			@make -C $(MINILIBX_DIR) clean -s
 			@echo "\033[0;31mObjects removed successfully"
 
 
 fclean:		clean
 			@${RM} ${NAME}
-			@make -C $(LIBFT_DIR) fclean -s
+			# @make -C $(LIBFT_DIR) fclean -s
 			@make -C $(MINILIBX_DIR) clean -s
 			@echo "\033[0;31mAll created objects were removed successfully"
 
